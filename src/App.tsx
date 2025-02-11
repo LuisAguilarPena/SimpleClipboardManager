@@ -1,7 +1,7 @@
 import './bulma.css'
 import { useState } from 'react'
 
-const cardColors = ['default', 'dark', 'primary', 'link', 'info', 'success', 'warning', 'danger']
+const cardColors = ['default', 'primary', 'link', 'dark', 'info', 'success', 'warning', 'danger']
 
 function App() {
   const [cardColor, setCardColor] = useState('')
