@@ -43,13 +43,19 @@ function App() {
     }
   }
 
+  // deleteHander function, will delete the card
+  const deleteHandler = (index: number) => {
+    clipboard.writeText('')
+    setClipboardContents(prevState => prevState.filter((_, i) => i !== index - 1))
+  }
+
   return (
     <>
       <section className='section title-section'>
         <div className='container is-flex is-justify-content-space-between is-align-items-center'>
           <div className='title-container container'>
-            <h1 className='title is-1'>Simple Clipboard Manager</h1>
-            <h2 className='subtitle is-3'>Review your clipboard history below</h2>
+            <h1 className='title is-1'>Simple Clipboard Manager V1</h1>
+            <h2 className='subtitle is-3'>Manage your clipboard history below</h2>
           </div>
           <div className='is-flex'>
               <button 
@@ -92,7 +98,9 @@ function App() {
                       </button>
                       <button 
                         title='Delete'
-                        className='delete'>
+                        className='delete'
+                        onClick={() => deleteHandler(index)}
+                      >
                       </button>
                     </div>
                   </div>
@@ -104,7 +112,7 @@ function App() {
             ))}
           </div>
         </div>
-      </section >
+      </section>
     </>
   )
 }
