@@ -6,7 +6,7 @@ import dropColor from './assets/drop.svg'
 const cardColors = ['default', 'primary', 'link', 'dark', 'info', 'success', 'warning', 'danger']
 
 function App() {
-  const [cardColor, setCardColor] = useState('')
+  const [cardColor, setCardColor] = useState('warning')
   const [clipboardContents, setClipboardContents] = useState<string[]>([])
 
   // set an interval to check the clipboard every 1 second
@@ -17,14 +17,13 @@ function App() {
 
       // if the clipboard contents are empty, return
       if (currentClipboardContents.length === 0) {
-        console.log('c');
         return
       }
       // if the current clipboard contents are different from the last clipboard contents
-      if (clipboardContents[clipboardContents.length - 1] !== currentClipboardContents) {
+      if (clipboardContents[0] !== currentClipboardContents) {
         // push the current clipboard contents to the state array called clipboardContents
         setClipboardContents(
-          prevState => [...prevState, currentClipboardContents]
+          prevState => [currentClipboardContents, ...prevState]
         )
       }
     }, 1000)
@@ -33,6 +32,17 @@ function App() {
     return () => clearInterval(interval)
   }, [clipboardContents])
   
+  // copyHandler function, will copy the content of the card to the clipboard and delete the card
+  const copyHandler = (content: string, index: number) => {
+    if (clipboardContents[0] == content) {
+      return
+    }
+
+    clipboard.writeText(content)
+    setClipboardContents(
+      prevState => prevState.filter((_, i) => i !== index))
+  }
+
   return (
     <>
       <section className='section title-section'>
@@ -58,15 +68,17 @@ function App() {
         <div className='container'>
           <div className='columns is-multiline'>
             {clipboardContents.map((content, index) => (
-              <div className='column is-3'>
+              <div className='column is-3' key={index}>
                 <article className={`message is-${cardColor}`}>
                   <div className='message-header'>
-                    <p>#{index}</p>
+                    <p>#{++index}</p>
                     <div className='is-flex is-align-items-center'>
                       <button 
                         title='Copy'
                         className='delete copy'
-                        style={{transform: 'rotate(-45deg)'}}>
+                        style={{transform: 'rotate(-45deg)'}}
+                        onClick={() => copyHandler(content, index)}
+                      >
                       </button>
                       <button 
                         title='Delete'
@@ -74,10 +86,7 @@ function App() {
                       </button>
                     </div>
                   </div>
-                  <div 
-                    className='message-body'
-                    
-                  >
+                  <div className='message-body'>
                     {content}
                   </div>
                 </article>
