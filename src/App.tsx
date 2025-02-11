@@ -1,145 +1,88 @@
 import './bulma.css'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { clipboard } from 'electron'
+import dropColor from './assets/drop.svg'
 
 const cardColors = ['default', 'primary', 'link', 'dark', 'info', 'success', 'warning', 'danger']
 
 function App() {
   const [cardColor, setCardColor] = useState('')
+  const [clipboardContents, setClipboardContents] = useState<string[]>([])
+
+  // set an interval to check the clipboard every 1 second
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // get the current clipboard contents
+      const currentClipboardContents = clipboard.readText()
+
+      // if the clipboard contents are empty, return
+      if (currentClipboardContents.length === 0) {
+        console.log('c');
+        return
+      }
+      // if the current clipboard contents are different from the last clipboard contents
+      if (clipboardContents[clipboardContents.length - 1] !== currentClipboardContents) {
+        // push the current clipboard contents to the state array called clipboardContents
+        setClipboardContents(
+          prevState => [...prevState, currentClipboardContents]
+        )
+      }
+    }, 1000)
+
+    // clear the interval when the component unmounts
+    return () => clearInterval(interval)
+  }, [clipboardContents])
   
   return (
     <>
       <section className='section title-section'>
-        <div className='container'>
-          <h1 className='title is-1'>Clipboard Manager</h1>
-          <h2 className='subtitle is-3'>Review your clipboard history below</h2>
+        <div className='container is-flex is-justify-content-space-between is-align-items-center'>
+          <div className='title-container container'>
+            <h1 className='title is-1'>Simple Clipboard Manager</h1>
+            <h2 className='subtitle is-3'>Review your clipboard history below</h2>
+          </div>
+          <div>
+              <button 
+                title='Change card color'
+                onClick={() => {
+                  const currentIndex = cardColors.indexOf(cardColor)
+                  setCardColor(cardColors[(currentIndex + 1) % cardColors.length])
+                }}
+              >
+                <img className='icon is-medium' src={dropColor}></img>
+              </button>
+          </div>
         </div>
       </section>
       <section className='section clipboard-section'>
         <div className='container'>
           <div className='columns is-multiline'>
-            <div 
-              className='column is-3' 
-              onClick={() => {
-                // toggle through the colors
-                const currentIndex = cardColors.indexOf(cardColor)
-                setCardColor(cardColors[(currentIndex + 1) % cardColors.length])
-                }}
-            >
-              <article className={`message is-${cardColor}`}>
-                <div className='message-header'>
-                  <p>#9</p>
-                  <div className='is-flex is-align-items-center'>
-                    <button className='delete copy' style={{transform: 'rotate(-45deg)'}}></button>
-                    <button className='delete'></button>
+            {clipboardContents.map((content, index) => (
+              <div className='column is-3'>
+                <article className={`message is-${cardColor}`}>
+                  <div className='message-header'>
+                    <p>#{index}</p>
+                    <div className='is-flex is-align-items-center'>
+                      <button 
+                        title='Copy'
+                        className='delete copy'
+                        style={{transform: 'rotate(-45deg)'}}>
+                      </button>
+                      <button 
+                        title='Delete'
+                        className='delete'>
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className='message-body'>
-                  Green technology and climate change we need to get the vernacular right, so waste of resources. Deliverables feature creep, but through the lens of, so circle back. Peel
-                  Green technology and climate change we need to get the vernacular right, so waste of resources. Deliverables feature creep, but through the lens of, so circle back. Peel
-                </div>
-              </article>
-            </div>
-            <div className='column is-3'>
-              <article className='message is-'>
-                <div className='message-header'>
-                  <p>#10</p>
-                  <div className='is-flex is-align-items-center'>
-                    <button className='delete copy' style={{transform: 'rotate(-45deg)'}}></button>
-                    <button className='delete'></button>
+                  <div 
+                    className='message-body'
+                    
+                  >
+                    {content}
                   </div>
-                </div>
-                <div className='message-body'>
-                  Green technology asdasfkjsdbfgkafsdbjkghdfgkdfshlgksjdfhgsdfjg
-                  Green technology asdasfkjsdbfgkafsdbjkghdfgkdfshlgksjdfhgsdfjg
-                </div>
-              </article>
-            </div>
-            <div className='column is-3'>
-              <article className='message is-'>
-                <div className='message-header'>
-                  <p>#10</p>
-                  <div className='is-flex is-align-items-center'>
-                    <button className='delete copy' style={{transform: 'rotate(-45deg)'}}></button>
-                    <button className='delete'></button>
-                  </div>
-                </div>
-                <div className='message-body'>
-                  Green technology asdasfkjsdbfgkafsdbjkghdfgkdfshlgksjdfhgsdfjg
-                  Green technology asdasfkjsdbfgkafsdbjkghdfgkdfshlgksjdfhgsdfjg
-                </div>
-              </article>
-            </div>
-            <div className='column is-3'>
-              <article className='message is-'>
-                <div className='message-header'>
-                  <p>#10</p>
-                  <div className='is-flex is-align-items-center'>
-                    <button className='delete copy' style={{transform: 'rotate(-45deg)'}}></button>
-                    <button className='delete'></button>
-                  </div>
-                </div>
-                <div className='message-body'>
-                  Green technology asdasfkjsdbfgkafsdbjkghdfgkdfshlgksjdfhgsdfjg
-                  Green technology asdasfkjsdbfgkafsdbjkghdfgkdfshlgksjdfhgsdfjg
-                </div>
-              </article>
-            </div>
-            <div className='column is-3'>
-              <article className='message is-'>
-                <div className='message-header'>
-                  <p>#10</p>
-                  <div className='is-flex is-align-items-center'>
-                    <button className='delete copy' style={{transform: 'rotate(-45deg)'}}></button>
-                    <button className='delete'></button>
-                  </div>
-                </div>
-                <div className='message-body'>
-                  Green technology asdasfkjsdbfgkafsdbjkghdfgkdfshlgksjdfhgsdfjg
-                  Green technology asdasfkjsdbfgkafsdbjkghdfgkdfshlgksjdfhgsdfjg
-                </div>
-              </article>
-            </div>
-            <div className='column is-3'>
-              <article className='message is-'>
-                <div className='message-header'>
-                  <p>#10</p>
-                  <div className='is-flex is-align-items-center'>
-                    <button className='delete copy' style={{transform: 'rotate(-45deg)'}}></button>
-                    <button className='delete'></button>
-                  </div>
-                </div>
-                <div className='message-body'>
-                  Green technology asdasfkjsdbfgk
-                  Green technology asdasfkjsdbfgk
-                  Green technology asdasfkjsdbfgk
-                  Green technology asdasfkjsdbfgk
-                  Green technology asdasfkjsdbfgk
-                  Green technology asdasfkjsdbfgk
-                  Green technology asdasfkjsdbfgk
-                  Green technology asdasfkjsdbfgk
-                  Green technology asdasfkjsdbfgk
-                  Green technology asdasfkjsdbfgk
-                </div>
-              </article>
-            </div>
-            <div className='column is-3'>
-              <article className='message is-'>
-                <div className='message-header'>
-                  <p>#10</p>
-                  <div className='is-flex is-align-items-center'>
-                    <button className='delete copy' style={{transform: 'rotate(-45deg)'}}></button>
-                    <button className='delete'></button>
-                  </div>
-                </div>
-                <div className='message-body'>
-                  Green technology asdasfkjsdbfgk
-                  Green technology asdasfkjsdbfgk
-                  Green technology asdasfkjsdbfgk
-                  Green technology asdasfkjsdbfgk
-                  Green technology asdasfkjsdbfgk
-                </div>
-              </article>
-            </div>
+                </article>
+              </div>
+            ))}
           </div>
         </div>
       </section >
