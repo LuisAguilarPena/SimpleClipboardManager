@@ -1,7 +1,11 @@
 import './bulma.css'
+import { useState } from 'react'
+
+const cardColors = ['default', 'dark', 'primary', 'link', 'info', 'success', 'warning', 'danger']
 
 function App() {
-
+  const [cardColor, setCardColor] = useState('')
+  
   return (
     <>
       <section className='section title-section'>
@@ -13,8 +17,15 @@ function App() {
       <section className='section clipboard-section'>
         <div className='container'>
           <div className='columns is-multiline'>
-            <div className='column is-3'>
-              <article className='message is-'>
+            <div 
+              className='column is-3' 
+              onClick={() => {
+                // toggle through the colors
+                const currentIndex = cardColors.indexOf(cardColor)
+                setCardColor(cardColors[(currentIndex + 1) % cardColors.length])
+                }}
+            >
+              <article className={`message is-${cardColor}`}>
                 <div className='message-header'>
                   <p>#9</p>
                   <div className='is-flex is-align-items-center'>
