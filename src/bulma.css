@@ -1,8 +1,18 @@
 @charset "UTF-8";
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 .message-body {
   height: 260px;
   overflow: auto;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
 }
 
 /*! bulma.io v1.0.2 | MIT License | github.com/jgthms/bulma */

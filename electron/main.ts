@@ -29,6 +29,7 @@ let win: BrowserWindow | null
 function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
+    show: false,
     webPreferences: {
       // needed for require
       nodeIntegration: true,
@@ -48,6 +49,13 @@ function createWindow() {
     // win.loadFile('dist/index.html')
     win.loadFile(path.join(RENDERER_DIST, 'index.html'))
   }
+
+  win.once('ready-to-show', () => {
+    if (win) {
+      win.show()
+      // win.maximize()
+    }
+  })
 }
 
 // Quit when all windows are closed, except on macOS. There, it's common

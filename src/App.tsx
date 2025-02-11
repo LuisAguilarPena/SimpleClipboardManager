@@ -3,11 +3,15 @@ import { useState, useEffect } from 'react'
 import { clipboard } from 'electron'
 import dropColor from './assets/drop.svg'
 import trash from './assets/trash.svg'
+import 'animate.css'
+import logo from './assets/logo.svg'
 
 const cardColors = ['default', 'primary', 'link', 'dark', 'info', 'success', 'warning', 'danger']
 
 function App() {
   const [cardColor, setCardColor] = useState('warning')
+  const [dropAnimation, setDropAnimation] = useState(false)
+  const [trashAnimation, setTrashAnimation] = useState(false)
   const [clipboardContents, setClipboardContents] = useState<string[]>([])
 
   // set an interval to check the clipboard every 1 second
@@ -51,43 +55,50 @@ function App() {
 
   return (
     <>
-      <section className='section title-section'>
-        <div className='container is-flex is-justify-content-space-between is-align-items-center'>
+      <section className='section title-section has-background-black-ter'>
+        <div className='container is-flex is-justify-content-space-between is-align-items-center animate__animated animate__fadeInDown animate__faster'>
           <div className='title-container container'>
-            <h1 className='title is-1'>Simple Clipboard Manager V1</h1>
-            <h2 className='subtitle is-3'>Manage your clipboard history below</h2>
+            <h1 className='is-unselectable title is-size-1-desktop is-size-2-tablet is-size-3-mobile'>
+              <img className='icon is-medium' src={logo}></img> Simple Clipboard Manager V1
+            </h1>
+            <h2 className='is-unselectable subtitle is-size-3-desktop is-size-4-tablet is-size-5-mobile'>Manage your clipboard history below</h2>
           </div>
-          <div className='is-flex'>
+          <div className='is-flex is-hidden-mobile'>
               <button 
-                className='mr-3'
+                className={`mr-3 ${dropAnimation ? 'animate__animated animate__pulse animate__fast animate__infinite' : ''}`}
                 title='Change card color'
                 onClick={() => {
                   const currentIndex = cardColors.indexOf(cardColor)
                   setCardColor(cardColors[(currentIndex + 1) % cardColors.length])
                 }}
+                onMouseEnter={() => setDropAnimation(true)}
+                onMouseLeave={() => setDropAnimation(false)}
               >
                 <img className='icon is-medium' src={dropColor}></img>
               </button>
               <button 
+                className={`${trashAnimation ? 'animate__animated animate__pulse animate__fast animate__infinite' : ''}`}
                 title='Reset clipboard'
                 onClick={() => {
                   clipboard.writeText('')
                   setClipboardContents([])
                 }}
+                onMouseEnter={() => setTrashAnimation(true)}
+                onMouseLeave={() => setTrashAnimation(false)}
               >
                 <img className='icon is-medium' src={trash}></img>
               </button>
           </div>
         </div>
       </section>
-      <section className='section clipboard-section'>
+      <section className='section clipboard-section mb-6'>
         <div className='container'>
           <div className='columns is-multiline'>
             {clipboardContents.map((content, index) => (
-              <div className='column is-3' key={index}>
+              <div className='column is-3 animate__animated animate__fadeInUp animate__faster' key={index}>
                 <article className={`message is-${cardColor}`}>
                   <div className='message-header'>
-                    <p>#{++index}</p>
+                    <p className='is-unselectable'>#{++index}</p>
                     <div className='is-flex is-align-items-center'>
                       <button 
                         title='Copy'
@@ -113,6 +124,12 @@ function App() {
           </div>
         </div>
       </section>
+      {/* add a footer here, position at bottom of page */}
+      <footer className='footer p-5 has-background-black-ter'>
+        <div className='content has-text-centered'>
+          <p className=''>Made with ❤️ by Luis Aguilar - Contact me at: fredo.aguilar.la@gmail.com</p>
+        </div>
+      </footer>
     </>
   )
 }

@@ -35,6 +35,9 @@ export default {
 2. Drag and Drop
 3. Ability to handle things other than text
 4. Ignore new lines?
-5. Style Scroll bars for large content
+  5. Style Scroll bars for large content
+  ::-webkit-scrollbar {
+    display: none;
+  }
 6. Separete components... modularize
 7. Keyboard events, check if I can track keyboard events outside of app
