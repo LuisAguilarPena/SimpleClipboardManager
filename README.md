@@ -29,5 +29,12 @@ export default {
 - Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
 
+# Todo
 
-1. Store 
+1. Help Screen
+2. Drag and Drop
+3. Ability to handle things other than text
+4. Ignore new lines?
+5. Style Scroll bars for large content
+6. Separete components... modularize
+7. Keyboard events, check if I can track keyboard events outside of app
