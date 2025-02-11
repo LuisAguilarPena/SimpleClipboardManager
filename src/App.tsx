@@ -27,7 +27,7 @@ function App() {
           prevState => [currentClipboardContents, ...prevState]
         )
       }
-    }, 300)
+    }, 100)
 
     // clear the interval when the component unmounts
     return () => clearInterval(interval)
