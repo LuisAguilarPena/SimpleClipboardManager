@@ -2,6 +2,7 @@ import './bulma.css'
 import { useState, useEffect } from 'react'
 import { clipboard } from 'electron'
 import dropColor from './assets/drop.svg'
+import trash from './assets/trash.svg'
 
 const cardColors = ['default', 'primary', 'link', 'dark', 'info', 'success', 'warning', 'danger']
 
@@ -26,7 +27,7 @@ function App() {
           prevState => [currentClipboardContents, ...prevState]
         )
       }
-    }, 1000)
+    }, 300)
 
     // clear the interval when the component unmounts
     return () => clearInterval(interval)
@@ -34,13 +35,12 @@ function App() {
   
   // copyHandler function, will copy the content of the card to the clipboard and delete the card
   const copyHandler = (content: string, index: number) => {
-    if (clipboardContents[0] == content) {
+    if (content === clipboardContents[0]) {
       return
+    } else {
+      clipboard.writeText(content)
+      setClipboardContents(prevState => prevState.filter((_, i) => i !== index - 1))
     }
-
-    clipboard.writeText(content)
-    setClipboardContents(
-      prevState => prevState.filter((_, i) => i !== index))
   }
 
   return (
@@ -51,8 +51,9 @@ function App() {
             <h1 className='title is-1'>Simple Clipboard Manager</h1>
             <h2 className='subtitle is-3'>Review your clipboard history below</h2>
           </div>
-          <div>
+          <div className='is-flex'>
               <button 
+                className='mr-3'
                 title='Change card color'
                 onClick={() => {
                   const currentIndex = cardColors.indexOf(cardColor)
@@ -60,6 +61,15 @@ function App() {
                 }}
               >
                 <img className='icon is-medium' src={dropColor}></img>
+              </button>
+              <button 
+                title='Reset clipboard'
+                onClick={() => {
+                  clipboard.writeText('')
+                  setClipboardContents([])
+                }}
+              >
+                <img className='icon is-medium' src={trash}></img>
               </button>
           </div>
         </div>
