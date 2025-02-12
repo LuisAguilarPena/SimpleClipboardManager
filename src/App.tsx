@@ -93,9 +93,9 @@ function App() {
       </section>
       <section className='section clipboard-section mb-6'>
         <div className='container'>
-          <div className='columns is-multiline'>
+          <div className='columns is-multiline is-mobile'>
             {clipboardContents.map((content, index) => (
-              <div className='column is-3 animate__animated animate__fadeInUp animate__faster' key={index}>
+              <div className='column is-3-desktop is-4-tablet is-half-mobile animate__animated animate__fadeInUp animate__faster' key={index}>
                 <article className={`message is-${cardColor}`}>
                   <div className='message-header'>
                     <p className='is-unselectable'>#{++index}</p>
@@ -116,7 +116,9 @@ function App() {
                     </div>
                   </div>
                   <div className='message-body'>
-                    {content}
+                    <p>
+                      {content}
+                    </p>
                   </div>
                 </article>
               </div>
