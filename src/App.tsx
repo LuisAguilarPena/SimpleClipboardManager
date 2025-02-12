@@ -125,9 +125,11 @@ function App() {
         </div>
       </section>
       {/* add a footer here, position at bottom of page */}
-      <footer className='footer p-5 has-background-black-ter'>
+      <footer className='footer p-4 has-background-black-ter'>
         <div className='content has-text-centered'>
-          <p className=''>Made with ❤️ by Luis Aguilar - Contact me at: fredo.aguilar.la@gmail.com</p>
+          <p className='footer-text has-text-weight-light'>
+            <span className='is-unselectable'>Made with ❤️ by Luis Aguilar - Contact me at: </span><strong>fredo.aguilar.la@gmail.com</strong>
+          </p>
         </div>
       </footer>
     </>
