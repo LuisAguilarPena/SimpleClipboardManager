@@ -26,3 +26,4 @@ dist-ssr
 .release
 ./release
 release
+dist-electron
