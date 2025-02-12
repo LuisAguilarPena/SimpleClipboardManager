@@ -8,11 +8,16 @@ import logo from './assets/logo.svg'
 
 const cardColors = ['default', 'primary', 'link', 'dark', 'info', 'success', 'warning', 'danger']
 
+interface ClipboardItem {
+  content: string
+  timestamp: string
+}
+
 function App() {
   const [cardColor, setCardColor] = useState('warning')
   const [dropAnimation, setDropAnimation] = useState(false)
   const [trashAnimation, setTrashAnimation] = useState(false)
-  const [clipboardContents, setClipboardContents] = useState<string[]>([])
+  const [clipboardContents, setClipboardContents] = useState<ClipboardItem[]>([])
 
   // set an interval to check the clipboard every 1 second
   useEffect(() => {
@@ -25,21 +30,30 @@ function App() {
         return
       }
       // if the current clipboard contents are different from the last clipboard contents
-      if (clipboardContents[0] !== currentClipboardContents) {
+      if (clipboardContents.length === 0 || clipboardContents[0].content !== currentClipboardContents) {
+        const timestamp = new Date().toLocaleString('en-US', {
+          month: 'numeric',
+          day: 'numeric',
+          year: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
+        })
         // push the current clipboard contents to the state array called clipboardContents
-        setClipboardContents(
-          prevState => [currentClipboardContents, ...prevState]
-        )
+        setClipboardContents(prevState => [
+          { content: currentClipboardContents, timestamp },
+          ...prevState,
+        ])
       }
-    }, 100)
+    }, 1000)
 
     // clear the interval when the component unmounts
     return () => clearInterval(interval)
   }, [clipboardContents])
-  
+
   // copyHandler function, will copy the content of the card to the clipboard and delete the card
   const copyHandler = (content: string, index: number) => {
-    if (content === clipboardContents[0]) {
+    if (content === clipboardContents[0].content) {
       return
     } else {
       clipboard.writeText(content)
@@ -94,17 +108,17 @@ function App() {
       <section className='section clipboard-section mb-6'>
         <div className='container'>
           <div className='columns is-multiline is-mobile'>
-            {clipboardContents.map((content, index) => (
+            {clipboardContents.map((item, index) => (
               <div className='column is-3-desktop is-4-tablet is-half-mobile animate__animated animate__fadeInUp animate__faster' key={index}>
                 <article className={`message is-${cardColor}`}>
                   <div className='message-header'>
-                    <p className='is-unselectable'>#{++index}</p>
+                    <p className='is-unselectable is-size-7-mobile'>{item.timestamp}</p>
                     <div className='is-flex is-align-items-center'>
                       <button 
                         title='Copy'
                         className='delete copy'
                         style={{transform: 'rotate(-45deg)'}}
-                        onClick={() => copyHandler(content, index)}
+                        onClick={() => copyHandler(item.content, index)}
                       >
                       </button>
                       <button 
@@ -117,7 +131,7 @@ function App() {
                   </div>
                   <div className='message-body'>
                     <p>
-                      {content}
+                      {item.content}
                     </p>
                   </div>
                 </article>
