@@ -29,7 +29,10 @@ let win: BrowserWindow | null
 function createWindow() {
   win = new BrowserWindow({
     icon: path.join(process.env.VITE_PUBLIC, 'electron-vite.svg'),
-    show: false,
+    // tooltip: 'Simple Clipboard Manager',
+    title: 'Simple Clipboard Manager',
+    backgroundColor: 'hsl(221, 14%, 9%)', // for a more native look
+    show: false, // for a more native look
     webPreferences: {
       // needed for require
       nodeIntegration: true,
@@ -53,10 +56,12 @@ function createWindow() {
   win.once('ready-to-show', () => {
     if (win) {
       win.show()
-      // win.maximize()
     }
   })
 }
+
+// Set the application name (this will be used as the tooltip in the dock)
+app.name = 'Simple Clipboard Manager'
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
