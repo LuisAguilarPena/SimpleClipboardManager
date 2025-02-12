@@ -1,5 +1,12 @@
 {
   "name": "simple-clipboard-manager",
+  "productName": "Simple Clipboard Manager",
+  "displayName": "Simple Clipboard Manager",
+  "description": "A simple clipboard manager built with Electron and React.",
+  "author": {
+    "name": "Luis Aguilar",
+    "email": "fredo.aguilar.la@gmail.com"
+  },
   "private": true,
   "version": "1.0.0",
   "type": "module",

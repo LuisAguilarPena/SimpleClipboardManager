@@ -78,7 +78,7 @@ function App() {
         <div className='container is-flex is-justify-content-space-between is-align-items-center animate__animated animate__fadeInDown animate__faster'>
           <div className='title-container container'>
             <h1 className='is-unselectable title is-size-1-desktop is-size-2-tablet is-size-3-mobile'>
-              <img className='icon is-medium' src={logo}></img> Simple Clipboard Manager V1
+              <img className='icon is-medium' src={logo}></img> Simple Clipboard Manager V0.1
             </h1>
             <h2 className='is-unselectable subtitle is-size-3-desktop is-size-4-tablet is-size-5-mobile'>Manage your clipboard history below</h2>
           </div>
