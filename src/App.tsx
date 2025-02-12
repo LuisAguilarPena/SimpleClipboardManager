@@ -146,7 +146,7 @@ function App() {
         </div>
       </section>
       {/* add a footer here, position at bottom of page */}
-      <footer className='footer p-4 has-background-black-ter'>
+      <footer className='footer p-4 has-background-black-ter animate__animated animate__fadeInUp animate__faster'>
         <div className='content has-text-centered'>
           <p className='footer-text has-text-weight-light'>
             <span className='is-unselectable'>Made with ❤️ by Luis Aguilar - Contact me at: </span><strong>fredo.aguilar.la@gmail.com</strong>
