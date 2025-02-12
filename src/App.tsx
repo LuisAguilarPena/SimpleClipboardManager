@@ -7,6 +7,8 @@ import 'animate.css'
 import logo from './assets/logo.svg'
 
 const cardColors = ['default', 'primary', 'link', 'dark', 'info', 'success', 'warning', 'danger']
+// https://stackoverflow.com/questions/71757346/how-to-import-datetimeformatoptions-in
+const timeOptions: Intl.DateTimeFormatOptions = { month: 'numeric', day: 'numeric', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }
 
 interface ClipboardItem {
   content: string
@@ -31,14 +33,7 @@ function App() {
       }
       // if the current clipboard contents are different from the last clipboard contents
       if (clipboardContents.length === 0 || clipboardContents[0].content !== currentClipboardContents) {
-        const timestamp = new Date().toLocaleString('en-US', {
-          month: 'numeric',
-          day: 'numeric',
-          year: '2-digit',
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false
-        })
+        const timestamp = new Date().toLocaleString('en-US', { ...timeOptions })
         // push the current clipboard contents to the state array called clipboardContents
         setClipboardContents(prevState => [
           { content: currentClipboardContents, timestamp },
@@ -51,20 +46,30 @@ function App() {
     return () => clearInterval(interval)
   }, [clipboardContents])
 
-  // copyHandler function, will copy the content of the card to the clipboard and delete the card
+  // copyHandler function, will copy the content of the card to the clipboard and move the card to the top of the clipboard
   const copyHandler = (content: string, index: number) => {
+    // if the content is the same as the most recent clipboard item, return
     if (content === clipboardContents[0].content) {
       return
     } else {
       clipboard.writeText(content)
-      setClipboardContents(prevState => prevState.filter((_, i) => i !== index - 1))
+      const timestamp = new Date().toLocaleString('en-US', { ...timeOptions })
+      const newClipboardContents = clipboardContents.filter((_, i) => i !== index)
+      setClipboardContents([{ content, timestamp }, ...newClipboardContents])
     }
   }
 
   // deleteHander function, will delete the card
   const deleteHandler = (index: number) => {
-    clipboard.writeText('')
-    setClipboardContents(prevState => prevState.filter((_, i) => i !== index - 1))
+    // filter out the card that was clicked on
+    setClipboardContents(prevState => prevState.filter((_, i) => i !== index))
+    // if there is only one clipboard item, clear the clipboard
+    if (index === 0 && clipboardContents.length === 1) {
+      clipboard.writeText('')
+      // if it was the most recent clipboard item, copy the next most recent clipboard item to the clipboard
+    } else if (index === 0) {
+      clipboard.writeText(clipboardContents[1].content)
+    }
   }
 
   return (
